@@ -1,6 +1,4 @@
-"""
-增强版自动化脚本
-"""
+"""鼠标键盘自动化脚本"""
 import pyautogui
 import time
 import tkinter as tk
@@ -347,6 +345,295 @@ class AutoClicker:
             print(f"组合键出错: {e}")
             return False
     
+    def multi_key_press(self, keys, duration=1.0):
+        """多按键同步按下功能"""
+        try:
+            if PYNPUT_AVAILABLE:
+                # 使用pynput库处理多按键同步
+                key_objects = []
+                for key in keys:
+                    if isinstance(key, str):
+                        # 处理特殊按键
+                        if key.lower() == 'space':
+                            key_obj = Key.space
+                        elif key.lower() == 'enter':
+                            key_obj = Key.enter
+                        elif key.lower() == 'tab':
+                            key_obj = Key.tab
+                        elif key.lower() == 'esc':
+                            key_obj = Key.esc
+                        elif key.lower() == 'backspace':
+                            key_obj = Key.backspace
+                        elif key.lower() == 'delete':
+                            key_obj = Key.delete
+                        elif key.lower() == 'shift':
+                            key_obj = Key.shift
+                        elif key.lower() == 'ctrl':
+                            key_obj = Key.ctrl
+                        elif key.lower() == 'alt':
+                            key_obj = Key.alt
+                        elif key.lower() == 'caps_lock':
+                            key_obj = Key.caps_lock
+                        elif key.lower() == 'cmd':
+                            key_obj = Key.cmd
+                        elif key.lower() == 'home':
+                            key_obj = Key.home
+                        elif key.lower() == 'end':
+                            key_obj = Key.end
+                        elif key.lower() == 'page_up':
+                            key_obj = Key.page_up
+                        elif key.lower() == 'page_down':
+                            key_obj = Key.page_down
+                        elif key.lower() == 'insert':
+                            key_obj = Key.insert
+                        elif key.lower() == 'menu':
+                            key_obj = Key.menu
+                        elif key.lower() == 'num_lock':
+                            key_obj = Key.num_lock
+                        elif key.lower() == 'print_screen':
+                            key_obj = Key.print_screen
+                        elif key.lower() == 'scroll_lock':
+                            key_obj = Key.scroll_lock
+                        elif key.lower() == 'pause':
+                            key_obj = Key.pause
+                        elif key.lower() == 'f1':
+                            key_obj = Key.f1
+                        elif key.lower() == 'f2':
+                            key_obj = Key.f2
+                        elif key.lower() == 'f3':
+                            key_obj = Key.f3
+                        elif key.lower() == 'f4':
+                            key_obj = Key.f4
+                        elif key.lower() == 'f5':
+                            key_obj = Key.f5
+                        elif key.lower() == 'f6':
+                            key_obj = Key.f6
+                        elif key.lower() == 'f7':
+                            key_obj = Key.f7
+                        elif key.lower() == 'f8':
+                            key_obj = Key.f8
+                        elif key.lower() == 'f9':
+                            key_obj = Key.f9
+                        elif key.lower() == 'f10':
+                            key_obj = Key.f10
+                        elif key.lower() == 'f11':
+                            key_obj = Key.f11
+                        elif key.lower() == 'f12':
+                            key_obj = Key.f12
+                        else:
+                            # 普通字符按键
+                            key_obj = key
+                    else:
+                        key_obj = key
+                    key_objects.append(key_obj)
+                
+                # 同时按下所有按键
+                for key_obj in key_objects:
+                    self.keyboard_controller.press(key_obj)
+                
+                # 保持按下状态一段时间
+                time.sleep(duration)
+                
+                # 同时释放所有按键
+                for key_obj in reversed(key_objects):
+                    self.keyboard_controller.release(key_obj)
+            else:
+                # 使用pyautogui模拟多按键同步
+                for key in keys:
+                    pyautogui.keyDown(key)  # 按下所有键
+                
+                time.sleep(duration)  # 保持按下状态
+                
+                for key in reversed(keys):
+                    pyautogui.keyUp(key)  # 释放所有键
+            
+            return True
+        except Exception as e:
+            print(f"多按键同步按下出错: {e}")
+            return False
+    
+    def multi_mouse_press(self, buttons, duration=1.0):
+        """多鼠标按键同步按下功能"""
+        try:
+            if PYNPUT_AVAILABLE:
+                # 使用pynput库处理多鼠标按键同步
+                button_objects = []
+                for button in buttons:
+                    if button == 'left':
+                        btn_obj = Button.left
+                    elif button == 'right':
+                        btn_obj = Button.right
+                    elif button == 'middle':
+                        btn_obj = Button.middle
+                    else:
+                        # 默认左键
+                        btn_obj = Button.left
+                    button_objects.append(btn_obj)
+                
+                # 同时按下所有鼠标按键
+                for btn_obj in button_objects:
+                    self.mouse_controller.press(btn_obj)
+                
+                # 保持按下状态一段时间
+                time.sleep(duration)
+                
+                # 同时释放所有鼠标按键
+                for btn_obj in reversed(button_objects):
+                    self.mouse_controller.release(btn_obj)
+            else:
+                # 使用pyautogui模拟多鼠标按键同步
+                for button in buttons:
+                    pyautogui.mouseDown(button=button)
+                
+                time.sleep(duration)  # 保持按下状态
+                
+                for button in reversed(buttons):
+                    pyautogui.mouseUp(button=button)
+            
+            return True
+        except Exception as e:
+            print(f"多鼠标按键同步按下出错: {e}")
+            return False
+    
+    def multi_keyboard_mouse_press(self, keys, buttons, duration=1.0):
+        """键盘与鼠标同时按的功能"""
+        try:
+            if PYNPUT_AVAILABLE:
+                # 使用pynput库处理键盘与鼠标同步
+                key_objects = []
+                for key in keys:
+                    if isinstance(key, str):
+                        # 处理特殊按键
+                        if key.lower() == 'space':
+                            key_obj = Key.space
+                        elif key.lower() == 'enter':
+                            key_obj = Key.enter
+                        elif key.lower() == 'tab':
+                            key_obj = Key.tab
+                        elif key.lower() == 'esc':
+                            key_obj = Key.esc
+                        elif key.lower() == 'backspace':
+                            key_obj = Key.backspace
+                        elif key.lower() == 'delete':
+                            key_obj = Key.delete
+                        elif key.lower() == 'shift':
+                            key_obj = Key.shift
+                        elif key.lower() == 'ctrl':
+                            key_obj = Key.ctrl
+                        elif key.lower() == 'alt':
+                            key_obj = Key.alt
+                        elif key.lower() == 'caps_lock':
+                            key_obj = Key.caps_lock
+                        elif key.lower() == 'cmd':
+                            key_obj = Key.cmd
+                        elif key.lower() == 'home':
+                            key_obj = Key.home
+                        elif key.lower() == 'end':
+                            key_obj = Key.end
+                        elif key.lower() == 'page_up':
+                            key_obj = Key.page_up
+                        elif key.lower() == 'page_down':
+                            key_obj = Key.page_down
+                        elif key.lower() == 'insert':
+                            key_obj = Key.insert
+                        elif key.lower() == 'menu':
+                            key_obj = Key.menu
+                        elif key.lower() == 'num_lock':
+                            key_obj = Key.num_lock
+                        elif key.lower() == 'print_screen':
+                            key_obj = Key.print_screen
+                        elif key.lower() == 'scroll_lock':
+                            key_obj = Key.scroll_lock
+                        elif key.lower() == 'pause':
+                            key_obj = Key.pause
+                        elif key.lower() == 'f1':
+                            key_obj = Key.f1
+                        elif key.lower() == 'f2':
+                            key_obj = Key.f2
+                        elif key.lower() == 'f3':
+                            key_obj = Key.f3
+                        elif key.lower() == 'f4':
+                            key_obj = Key.f4
+                        elif key.lower() == 'f5':
+                            key_obj = Key.f5
+                        elif key.lower() == 'f6':
+                            key_obj = Key.f6
+                        elif key.lower() == 'f7':
+                            key_obj = Key.f7
+                        elif key.lower() == 'f8':
+                            key_obj = Key.f8
+                        elif key.lower() == 'f9':
+                            key_obj = Key.f9
+                        elif key.lower() == 'f10':
+                            key_obj = Key.f10
+                        elif key.lower() == 'f11':
+                            key_obj = Key.f11
+                        elif key.lower() == 'f12':
+                            key_obj = Key.f12
+                        else:
+                            # 普通字符按键
+                            key_obj = key
+                    else:
+                        key_obj = key
+                    key_objects.append(key_obj)
+                
+                button_objects = []
+                for button in buttons:
+                    if button == 'left':
+                        btn_obj = Button.left
+                    elif button == 'right':
+                        btn_obj = Button.right
+                    elif button == 'middle':
+                        btn_obj = Button.middle
+                    else:
+                        # 默认左键
+                        btn_obj = Button.left
+                    button_objects.append(btn_obj)
+                
+                # 同时按下所有键盘按键
+                for key_obj in key_objects:
+                    self.keyboard_controller.press(key_obj)
+                
+                # 同时按下所有鼠标按键
+                for btn_obj in button_objects:
+                    self.mouse_controller.press(btn_obj)
+                
+                # 保持按下状态一段时间
+                time.sleep(duration)
+                
+                # 同时释放所有鼠标按键
+                for btn_obj in reversed(button_objects):
+                    self.mouse_controller.release(btn_obj)
+                
+                # 同时释放所有键盘按键
+                for key_obj in reversed(key_objects):
+                    self.keyboard_controller.release(key_obj)
+            else:
+                # 使用pyautogui模拟键盘与鼠标同步
+                # 同时按下所有键盘按键
+                for key in keys:
+                    pyautogui.keyDown(key)
+                
+                # 同时按下所有鼠标按键
+                for button in buttons:
+                    pyautogui.mouseDown(button=button)
+                
+                # 保持按下状态一段时间
+                time.sleep(duration)
+                
+                # 同时释放所有鼠标按键
+                for button in reversed(buttons):
+                    pyautogui.mouseUp(button=button)
+                
+                # 同时释放所有键盘按键
+                for key in reversed(keys):
+                    pyautogui.keyUp(key)
+            
+            return True
+        except Exception as e:
+            print(f"键盘与鼠标同时按下出错: {e}")
+            return False
+    
     def drag_mouse(self, x, y, duration=0.5, button='left'):
         try:
             pyautogui.dragTo(x, y, duration=duration, button=button)
@@ -382,6 +669,99 @@ class AutoClicker:
             return True
         except Exception as e:
             print(f"长按鼠标出错: {e}")
+            return False
+    
+    def hold_key(self, key, duration=1.0):
+        """长按键盘按键功能"""
+        try:
+            if PYNPUT_AVAILABLE:
+                # 使用pynput库处理按键
+                if isinstance(key, str):
+                    # 处理特殊按键
+                    if key.lower() == 'space':
+                        key = Key.space
+                    elif key.lower() == 'enter':
+                        key = Key.enter
+                    elif key.lower() == 'tab':
+                        key = Key.tab
+                    elif key.lower() == 'esc':
+                        key = Key.esc
+                    elif key.lower() == 'backspace':
+                        key = Key.backspace
+                    elif key.lower() == 'delete':
+                        key = Key.delete
+                    elif key.lower() == 'shift':
+                        key = Key.shift
+                    elif key.lower() == 'ctrl':
+                        key = Key.ctrl
+                    elif key.lower() == 'alt':
+                        key = Key.alt
+                    elif key.lower() == 'caps_lock':
+                        key = Key.caps_lock
+                    elif key.lower() == 'cmd':
+                        key = Key.cmd
+                    elif key.lower() == 'home':
+                        key = Key.home
+                    elif key.lower() == 'end':
+                        key = Key.end
+                    elif key.lower() == 'page_up':
+                        key = Key.page_up
+                    elif key.lower() == 'page_down':
+                        key = Key.page_down
+                    elif key.lower() == 'insert':
+                        key = Key.insert
+                    elif key.lower() == 'menu':
+                        key = Key.menu
+                    elif key.lower() == 'num_lock':
+                        key = Key.num_lock
+                    elif key.lower() == 'print_screen':
+                        key = Key.print_screen
+                    elif key.lower() == 'scroll_lock':
+                        key = Key.scroll_lock
+                    elif key.lower() == 'pause':
+                        key = Key.pause
+                    elif key.lower() == 'f1':
+                        key = Key.f1
+                    elif key.lower() == 'f2':
+                        key = Key.f2
+                    elif key.lower() == 'f3':
+                        key = Key.f3
+                    elif key.lower() == 'f4':
+                        key = Key.f4
+                    elif key.lower() == 'f5':
+                        key = Key.f5
+                    elif key.lower() == 'f6':
+                        key = Key.f6
+                    elif key.lower() == 'f7':
+                        key = Key.f7
+                    elif key.lower() == 'f8':
+                        key = Key.f8
+                    elif key.lower() == 'f9':
+                        key = Key.f9
+                    elif key.lower() == 'f10':
+                        key = Key.f10
+                    elif key.lower() == 'f11':
+                        key = Key.f11
+                    elif key.lower() == 'f12':
+                        key = Key.f12
+                    else:
+                        # 普通字符按键
+                        pass
+                
+                # 按下按键
+                self.keyboard_controller.press(key)
+                # 等待指定时间
+                time.sleep(duration)
+                # 释放按键
+                self.keyboard_controller.release(key)
+            else:
+                # 使用pyautogui模拟长按（按下后等待，然后释放）
+                pyautogui.keyDown(key)
+                time.sleep(duration)
+                pyautogui.keyUp(key)
+            return True
+        except Exception as e:
+            print(f"长按键盘按键出错: {e}")
             return False
     
     def add_action(self, action_type, **kwargs):
@@ -434,7 +814,7 @@ class AutoClicker:
                 f.write("# 鼠标键盘自动化脚本\n")
                 f.write("# 此文件由自动化工具生成，可以直接编辑\n")
                 f.write("# 格式: 类型 参数=值\n")
-                f.write("# 支持的动作类型: move, click, double_click, right_click, left_click, scroll, press, type, hotkey, drag, wait, hold\n")
+                f.write("# 支持的动作类型: move, click, double_click, right_click, left_click, scroll, press, type, hotkey, drag, wait, hold, key_hold, multi_key, multi_mouse, multi_key_mouse\n")
                 f.write("\n")
                 
                 for i, action in enumerate(self.actions):
@@ -538,6 +918,14 @@ class AutoClicker:
                     self.wait(**kwargs)
                 elif action_type == 'hold':
                     self.hold_mouse(**kwargs)
+                elif action_type == 'key_hold':
+                    self.hold_key(**kwargs)
+                elif action_type == 'multi_key':
+                    self.multi_key_press(**kwargs)
+                elif action_type == 'multi_mouse':
+                    self.multi_mouse_press(**kwargs)
+                elif action_type == 'multi_key_mouse':
+                    self.multi_keyboard_mouse_press(**kwargs)
                 
                 if interval > 0 and i < len(self.actions) - 1:
                     time.sleep(interval)
@@ -554,7 +942,7 @@ class AutoClickerGUI:
     def __init__(self):
         self.autoclicker = AutoClicker()
         self.window = tk.Tk()
-        self.window.title("鼠标键盘自动化控制")
+        self.window.title("鼠标键盘自动化控制 v6.0 - 精简版")
         self.window.geometry("900x850")
         
         # 位置缓存，用于存储F2记录的位置
@@ -634,7 +1022,7 @@ class AutoClickerGUI:
                 pystray.MenuItem("退出", self.quit_application)
             )
             
-            self.tray_icon = pystray.Icon("auto_clicker", image, "自动化控制 v5.1", menu)
+            self.tray_icon = pystray.Icon("auto_clicker", image, "自动化控制 v6.0", menu)
         except Exception as e:
             print(f"创建托盘图标失败: {e}")
     
@@ -693,14 +1081,8 @@ class AutoClickerGUI:
         except Exception as e:
             print(f"停止热键监听失败: {e}")
     
-    # ============================================================================
-    # UI创建函数（增强功能） - 移除了手动控制部分
-    # ============================================================================
-
-    # create_manual_tab 函数已被完全移除
-
     def create_sequence_tab(self, notebook):
-        """创建动作序列选项卡（增强功能）"""
+        """创建动作序列选项卡"""
         seq_frame = ttk.Frame(notebook)
         notebook.add(seq_frame, text="动作序列")
         
@@ -722,7 +1104,7 @@ class AutoClickerGUI:
         self.tree.pack(side='left', fill='both', expand=True)
         scrollbar.pack(side='right', fill='y')
         
-        # 添加右键菜单
+        # 右键菜单
         self.context_menu = tk.Menu(self.window, tearoff=0)
         self.context_menu.add_command(label="在上方插入移动指令", command=self.insert_move_above)
         self.context_menu.add_command(label="在上方插入左键点击", command=lambda: self.insert_click_above('left'))
@@ -732,6 +1114,10 @@ class AutoClickerGUI:
         self.context_menu.add_command(label="在上方插入拖拽指令", command=self.insert_drag_above)
         self.context_menu.add_command(label="在上方插入滚动指令", command=self.insert_scroll_above)
         self.context_menu.add_command(label="在上方插入长按指令", command=self.insert_hold_above)
+        self.context_menu.add_command(label="在上方插入键盘长按指令", command=self.insert_key_hold_above)
+        self.context_menu.add_command(label="在上方插入多按键同步指令", command=self.insert_multi_key_above)
+        self.context_menu.add_command(label="在上方插入多鼠标按键同步指令", command=self.insert_multi_mouse_above)
+        self.context_menu.add_command(label="在上方插入键盘与鼠标同步指令", command=self.insert_multi_key_mouse_above)
         self.context_menu.add_separator()
         self.context_menu.add_command(label="删除选中", command=self.delete_selected_action)
         
@@ -742,39 +1128,27 @@ class AutoClickerGUI:
         control_frame = ttk.Frame(seq_frame)
         control_frame.pack(fill='x', padx=10, pady=5)
         
-        # 添加一个带下拉菜单的移动按钮
-        move_button_frame = ttk.Frame(control_frame)
-        move_button_frame.pack(side='left', padx=5)
+        # 创建可滚动的按钮区域
+        canvas_frame = ttk.Frame(control_frame)
+        canvas_frame.pack(fill='x', expand=True)
         
-        # 主按钮
-        self.move_button = ttk.Button(move_button_frame, text="添加移动", 
-                                     command=self.add_move_action)
-        self.move_button.pack(side='top')
+        canvas = tk.Canvas(canvas_frame, height=80)
+        scrollbar_h = ttk.Scrollbar(canvas_frame, orient="horizontal", command=canvas.xview)
+        scrollable_frame = ttk.Frame(canvas)
         
-        # 下拉箭头按钮
-        self.move_dropdown = ttk.Button(move_button_frame, text="▼", width=3,
-                                       command=self.show_position_menu)
-        self.move_dropdown.pack(side='bottom')
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
         
-        ttk.Button(control_frame, text="添加左键点击", 
-                  command=lambda: self.add_click_action('left')).pack(side='left', padx=5)
-        ttk.Button(control_frame, text="添加右键点击", 
-                  command=lambda: self.add_click_action('right')).pack(side='left', padx=5)
-        ttk.Button(control_frame, text="添加等待", 
-                  command=self.add_wait_action).pack(side='left', padx=5)
-        ttk.Button(control_frame, text="添加按键", 
-                  command=self.add_key_action).pack(side='left', padx=5)
-        ttk.Button(control_frame, text="添加拖拽", 
-                  command=self.add_drag_action).pack(side='left', padx=5)
-        ttk.Button(control_frame, text="添加滚动", 
-                  command=self.add_scroll_action).pack(side='left', padx=5)
-        ttk.Button(control_frame, text="添加长按", 
-                  command=self.add_hold_action).pack(side='left', padx=5)
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(xscrollcommand=scrollbar_h.set)
         
-        ttk.Button(control_frame, text="删除选中", 
-                  command=self.delete_selected_action).pack(side='left', padx=20)
-        ttk.Button(control_frame, text="清空列表", 
-                  command=self.clear_action_list).pack(side='left', padx=5)
+        # 添加按钮到滚动框架
+        self.add_buttons_to_frame(scrollable_frame)
+        
+        canvas.pack(side="top", fill="both", expand=True)
+        scrollbar_h.pack(side="bottom", fill="x")
         
         # 执行控制
         execute_frame = ttk.LabelFrame(seq_frame, text="执行控制", padding=10)
@@ -812,6 +1186,50 @@ class AutoClickerGUI:
                   command=self.save_script_txt).pack(side='left', padx=5)
         ttk.Button(file_frame, text="加载脚本(.txt)", 
                   command=self.load_script_txt).pack(side='left', padx=5)
+    
+    def add_buttons_to_frame(self, parent_frame):
+        """将所有按钮添加到指定框架"""
+        # 添加一个带下拉菜单的移动按钮
+        move_button_frame = ttk.Frame(parent_frame)
+        move_button_frame.pack(side='left', padx=5)
+        
+        # 主按钮
+        self.move_button = ttk.Button(move_button_frame, text="添加移动", 
+                                     command=self.add_move_action)
+        self.move_button.pack(side='top')
+        
+        # 下拉箭头按钮
+        self.move_dropdown = ttk.Button(move_button_frame, text="▼", width=3,
+                                       command=self.show_position_menu)
+        self.move_dropdown.pack(side='bottom')
+        
+        ttk.Button(parent_frame, text="添加左键点击", 
+                  command=lambda: self.add_click_action('left')).pack(side='left', padx=5)
+        ttk.Button(parent_frame, text="添加右键点击", 
+                  command=lambda: self.add_click_action('right')).pack(side='left', padx=5)
+        ttk.Button(parent_frame, text="添加等待", 
+                  command=self.add_wait_action).pack(side='left', padx=5)
+        ttk.Button(parent_frame, text="添加按键", 
+                  command=self.add_key_action).pack(side='left', padx=5)
+        ttk.Button(parent_frame, text="添加拖拽", 
+                  command=self.add_drag_action).pack(side='left', padx=5)
+        ttk.Button(parent_frame, text="添加滚动", 
+                  command=self.add_scroll_action).pack(side='left', padx=5)
+        ttk.Button(parent_frame, text="添加长按", 
+                  command=self.add_hold_action).pack(side='left', padx=5)
+        ttk.Button(parent_frame, text="添加键盘长按", 
+                  command=self.add_key_hold_action).pack(side='left', padx=5)
+        ttk.Button(parent_frame, text="添加多按键同步", 
+                  command=self.add_multi_key_action).pack(side='left', padx=5)
+        ttk.Button(parent_frame, text="添加多鼠标同步", 
+                  command=self.add_multi_mouse_action).pack(side='left', padx=5)
+        ttk.Button(parent_frame, text="添加键盘鼠标同步", 
+                  command=self.add_multi_key_mouse_action).pack(side='left', padx=5)
+        
+        ttk.Button(parent_frame, text="删除选中", 
+                  command=self.delete_selected_action).pack(side='left', padx=20)
+        ttk.Button(parent_frame, text="清空列表", 
+                  command=self.clear_action_list).pack(side='left', padx=5)
     
     def show_position_menu(self):
         """显示记录的位置菜单"""
@@ -854,7 +1272,7 @@ class AutoClickerGUI:
             messagebox.showinfo("清除成功", "位置缓存已清空")
     
     def create_settings_tab(self, notebook):
-        """创建设置选项卡（增强显示状态）"""
+        """创建设置选项卡"""
         settings_frame = ttk.Frame(notebook)
         notebook.add(settings_frame, text="设置与帮助")
         
@@ -931,6 +1349,11 @@ class AutoClickerGUI:
         hotkey_text = """全局热键（即使窗口不在前台也能工作）：
         - F1: 开始/停止执行任务
         - F2: 记录当前鼠标位置到缓存
+        
+        重要提示：
+        1. 请确保以管理员身份运行本程序
+        2. 部分防病毒软件可能阻止键盘钩子
+        3. 在全屏游戏中，确保游戏不是"独占全屏"模式
         """
         
         hotkey_label = ttk.Label(hotkey_info_frame, text=hotkey_text, justify='left')
@@ -941,9 +1364,19 @@ class AutoClickerGUI:
         features_frame.pack(fill='x', padx=10, pady=5)
         
         features_text = """功能特性：
-        1. 动作序列：编辑、执行自动化任务
-        2. 按键选择功能：可以正确处理特殊按键
-        3. F2位置记录：按F2可记录当前位置，通过下拉菜单快速添加到动作序列
+        1. 动作序列：录制、编辑、执行自动化任务
+        2. 长按功能：支持长按鼠标按钮指定时间
+        3. 键盘长按功能：支持长按键盘按键指定时间
+        4. 多按键同步功能：支持同时按下多个键盘或鼠标按键
+        5. 键盘与鼠标同步功能：支持键盘和鼠标按键同时按下
+        6. pynput库：更精确的键盘输入输出控制
+        7. 全局热键：F1/F2键可在任何地方快速操作
+        8. 后台运行：可最小化到系统托盘继续执行
+        9. 按键选择功能：支持特殊按键的处理
+        10. 按键选择器：字母显示为小写
+        11. F2位置记录：按F2可记录当前位置，通过下拉菜单快速添加到动作序列
+        12. 自适应UI：当按钮过多时自动出现滚动条
+        13. 键盘鼠标同步：所有按键无延迟同时按下
         """
         
         features_label = ttk.Label(features_frame, text=features_text, justify='left')
@@ -962,6 +1395,21 @@ class AutoClickerGUI:
                  text="注意：启用后，将鼠标快速移动到屏幕左上角(0,0)可以紧急停止程序",
                  foreground='gray').pack(anchor='w', pady=5)
         
+        # 安装提示
+        install_frame = ttk.LabelFrame(settings_frame, text="依赖库安装", padding=10)
+        install_frame.pack(fill='x', padx=10, pady=5)
+        
+        install_text = """如果pynput库未安装，请以管理员身份运行以下命令：
+        
+        命令提示符（管理员）：
+        pip install pyautogui pystray pillow pynput
+        
+        或者使用清华镜像源加速：
+        pip install pyautogui pystray pillow pynput -i https://pypi.tuna.tsinghua.edu.cn/simple
+        """
+        
+        install_label = ttk.Label(install_frame, text=install_text, justify='left')
+        install_label.pack(anchor='w')
     
     def view_position_cache(self):
         """查看位置缓存"""
@@ -986,10 +1434,6 @@ class AutoClickerGUI:
         text_widget.config(state=tk.DISABLED)  # 设置为只读
         text_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-    
-    # ============================================================================
-    # 功能函数
-    # ============================================================================
     
     def show_context_menu(self, event):
         """显示右键菜单"""
@@ -1125,10 +1569,110 @@ class AutoClickerGUI:
         except Exception as e:
             messagebox.showerror("错误", f"插入长按指令时出错: {e}")
     
-    # ============================================================================
-    # 按键选择功能
-    # ============================================================================
-
+    def insert_key_hold_above(self):
+        """在选中项上方插入键盘长按指令"""
+        index = self.get_selected_index()
+        if index is None:
+            messagebox.showwarning("警告", "请先选择一个动作")
+            return
+            
+        try:
+            key = self.select_key_dialog("在上方插入键盘长按")
+            if not key:
+                return
+                
+            duration = simpledialog.askfloat("长按时间", "请输入长按时间（秒）:", 
+                                           initialvalue=1.0, minvalue=0.1, maxvalue=10)
+            if duration:
+                self.autoclicker.insert_action_at(index, 'key_hold', key=key, duration=duration)
+                self.update_action_list()
+                messagebox.showinfo("成功", f"已在第 {index+1} 个位置插入键盘长按指令")
+        except Exception as e:
+            messagebox.showerror("错误", f"插入键盘长按指令时出错: {e}")
+    
+    def insert_multi_key_above(self):
+        """在选中项上方插入多按键同步指令"""
+        index = self.get_selected_index()
+        if index is None:
+            messagebox.showwarning("警告", "请先选择一个动作")
+            return
+            
+        try:
+            # 提示用户输入按键列表
+            keys_input = simpledialog.askstring("多按键同步", "请输入要同时按下的按键（用逗号分隔）:", 
+                                               initialvalue="w,a,s,d")
+            if not keys_input:
+                return
+                
+            keys = [k.strip() for k in keys_input.split(',')]
+            
+            duration = simpledialog.askfloat("持续时间", "请输入按键持续时间（秒）:", 
+                                           initialvalue=1.0, minvalue=0.1, maxvalue=10)
+            if duration:
+                self.autoclicker.insert_action_at(index, 'multi_key', keys=keys, duration=duration)
+                self.update_action_list()
+                messagebox.showinfo("成功", f"已在第 {index+1} 个位置插入多按键同步指令")
+        except Exception as e:
+            messagebox.showerror("错误", f"插入多按键同步指令时出错: {e}")
+    
+    def insert_multi_mouse_above(self):
+        """在选中项上方插入多鼠标按键同步指令"""
+        index = self.get_selected_index()
+        if index is None:
+            messagebox.showwarning("警告", "请先选择一个动作")
+            return
+            
+        try:
+            # 提示用户输入鼠标按键列表
+            buttons_input = simpledialog.askstring("多鼠标按键同步", "请输入要同时按下的鼠标按键（left,right,middle，用逗号分隔）:", 
+                                                 initialvalue="left,right")
+            if not buttons_input:
+                return
+                
+            buttons = [b.strip() for b in buttons_input.split(',')]
+            
+            duration = simpledialog.askfloat("持续时间", "请输入按键持续时间（秒）:", 
+                                           initialvalue=1.0, minvalue=0.1, maxvalue=10)
+            if duration:
+                self.autoclicker.insert_action_at(index, 'multi_mouse', buttons=buttons, duration=duration)
+                self.update_action_list()
+                messagebox.showinfo("成功", f"已在第 {index+1} 个位置插入多鼠标按键同步指令")
+        except Exception as e:
+            messagebox.showerror("错误", f"插入多鼠标按键同步指令时出错: {e}")
+    
+    def insert_multi_key_mouse_above(self):
+        """在选中项上方插入键盘与鼠标同步指令"""
+        index = self.get_selected_index()
+        if index is None:
+            messagebox.showwarning("警告", "请先选择一个动作")
+            return
+            
+        try:
+            # 提示用户输入键盘按键列表
+            keys_input = simpledialog.askstring("键盘按键", "请输入要同时按下的键盘按键（用逗号分隔）:", 
+                                               initialvalue="w,a,s,d")
+            if not keys_input:
+                return
+                
+            keys = [k.strip() for k in keys_input.split(',')]
+            
+            # 提示用户输入鼠标按键列表
+            buttons_input = simpledialog.askstring("鼠标按键", "请输入要同时按下的鼠标按键（left,right,middle，用逗号分隔）:", 
+                                                 initialvalue="left,right")
+            if not buttons_input:
+                return
+                
+            buttons = [b.strip() for b in buttons_input.split(',')]
+            
+            duration = simpledialog.askfloat("持续时间", "请输入按键持续时间（秒）:", 
+                                           initialvalue=1.0, minvalue=0.1, maxvalue=10)
+            if duration:
+                self.autoclicker.insert_action_at(index, 'multi_key_mouse', keys=keys, buttons=buttons, duration=duration)
+                self.update_action_list()
+                messagebox.showinfo("成功", f"已在第 {index+1} 个位置插入键盘与鼠标同步指令")
+        except Exception as e:
+            messagebox.showerror("错误", f"插入键盘与鼠标同步指令时出错: {e}")
+    
     def select_key_dialog(self, title="选择按键"):
         """弹出按键选择对话框"""
         dialog = tk.Toplevel(self.window)
@@ -1140,9 +1684,8 @@ class AutoClickerGUI:
         # 居中显示
         dialog.geometry("+%d+%d" % (self.window.winfo_rootx()+50, self.window.winfo_rooty()+50))
         
-        # 创建按键分类 - 将字母改为小写
         categories = {
-            "字母": [chr(i) for i in range(ord('a'), ord('z')+1)], 
+            "字母": [chr(i) for i in range(ord('a'), ord('z')+1)],
             "数字": [str(i) for i in range(0, 10)],
             "功能键": ["F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"],
             "控制键": ["space", "enter", "tab", "esc", "backspace", "delete", "shift", "ctrl", "alt", "caps_lock", "cmd"],
@@ -1195,10 +1738,6 @@ class AutoClickerGUI:
         
         return selected_key.get()
     
-    # ============================================================================
-    # 原始功能函数（部分增强） - 移除了依赖手动控制界面的函数
-    # ============================================================================
-
     def get_current_pos(self):
         pos = self.autoclicker.get_current_position()
         # 不再设置到输入框，直接弹窗
@@ -1223,7 +1762,7 @@ class AutoClickerGUI:
             messagebox.showerror("错误", "请输入有效的坐标数字")
     
     def add_click_action(self, button_type='left'):
-        """添加点击动作，区分左右键（增强功能）"""
+        """添加点击动作"""
         action = self.autoclicker.add_action('click', button=button_type, clicks=1)
         self.update_action_list()
         button_name = "左键" if button_type == 'left' else "右键"
@@ -1282,6 +1821,90 @@ class AutoClickerGUI:
                 messagebox.showinfo("成功", f"已添加长按 {button_type} 键 {duration} 秒")
         except Exception as e:
             messagebox.showerror("错误", f"添加长按动作时出错: {e}")
+    
+    def add_key_hold_action(self):
+        """添加键盘长按动作"""
+        try:
+            key = self.select_key_dialog("添加键盘长按")
+            if not key:
+                return
+                
+            duration = simpledialog.askfloat("长按时间", "请输入长按时间（秒）:", 
+                                           initialvalue=1.0, minvalue=0.1, maxvalue=10)
+            if duration:
+                action = self.autoclicker.add_action('key_hold', key=key, duration=duration)
+                self.update_action_list()
+                messagebox.showinfo("成功", f"已添加键盘长按 {key} 键 {duration} 秒")
+        except Exception as e:
+            messagebox.showerror("错误", f"添加键盘长按动作时出错: {e}")
+    
+    def add_multi_key_action(self):
+        """添加多按键同步动作"""
+        try:
+            # 提示用户输入按键列表
+            keys_input = simpledialog.askstring("多按键同步", "请输入要同时按下的按键（用逗号分隔）:", 
+                                               initialvalue="w,a,s,d")
+            if not keys_input:
+                return
+                
+            keys = [k.strip() for k in keys_input.split(',')]
+            
+            duration = simpledialog.askfloat("持续时间", "请输入按键持续时间（秒）:", 
+                                           initialvalue=1.0, minvalue=0.1, maxvalue=10)
+            if duration:
+                action = self.autoclicker.add_action('multi_key', keys=keys, duration=duration)
+                self.update_action_list()
+                messagebox.showinfo("成功", f"已添加多按键同步动作: {keys} 持续 {duration} 秒")
+        except Exception as e:
+            messagebox.showerror("错误", f"添加多按键同步动作时出错: {e}")
+    
+    def add_multi_mouse_action(self):
+        """添加多鼠标按键同步动作"""
+        try:
+            # 提示用户输入鼠标按键列表
+            buttons_input = simpledialog.askstring("多鼠标按键同步", "请输入要同时按下的鼠标按键（left,right,middle，用逗号分隔）:", 
+                                                 initialvalue="left,right")
+            if not buttons_input:
+                return
+                
+            buttons = [b.strip() for b in buttons_input.split(',')]
+            
+            duration = simpledialog.askfloat("持续时间", "请输入按键持续时间（秒）:", 
+                                           initialvalue=1.0, minvalue=0.1, maxvalue=10)
+            if duration:
+                action = self.autoclicker.add_action('multi_mouse', buttons=buttons, duration=duration)
+                self.update_action_list()
+                messagebox.showinfo("成功", f"已添加多鼠标按键同步动作: {buttons} 持续 {duration} 秒")
+        except Exception as e:
+            messagebox.showerror("错误", f"添加多鼠标按键同步动作时出错: {e}")
+    
+    def add_multi_key_mouse_action(self):
+        """添加键盘与鼠标同步动作"""
+        try:
+            # 提示用户输入键盘按键列表
+            keys_input = simpledialog.askstring("键盘按键", "请输入要同时按下的键盘按键（用逗号分隔）:", 
+                                               initialvalue="w,a,s,d")
+            if not keys_input:
+                return
+                
+            keys = [k.strip() for k in keys_input.split(',')]
+            
+            # 提示用户输入鼠标按键列表
+            buttons_input = simpledialog.askstring("鼠标按键", "请输入要同时按下的鼠标按键（left,right,middle，用逗号分隔）:", 
+                                                 initialvalue="left,right")
+            if not buttons_input:
+                return
+                
+            buttons = [b.strip() for b in buttons_input.split(',')]
+            
+            duration = simpledialog.askfloat("持续时间", "请输入按键持续时间（秒）:", 
+                                           initialvalue=1.0, minvalue=0.1, maxvalue=10)
+            if duration:
+                action = self.autoclicker.add_action('multi_key_mouse', keys=keys, buttons=buttons, duration=duration)
+                self.update_action_list()
+                messagebox.showinfo("成功", f"已添加键盘与鼠标同步动作: 键盘{keys} + 鼠标{buttons} 持续 {duration} 秒")
+        except Exception as e:
+            messagebox.showerror("错误", f"添加键盘与鼠标同步动作时出错: {e}")
     
     def delete_selected_action(self):
         selected = self.tree.selection()
@@ -1447,7 +2070,7 @@ class AutoClickerGUI:
 def check_dependencies():
     """检查依赖库"""
     print("=" * 60)
-    print("自动化脚本 v5.1 - 精简版")
+    print("自动化脚本 v6.0 - 精简版")
     print("=" * 60)
     
     missing = []
